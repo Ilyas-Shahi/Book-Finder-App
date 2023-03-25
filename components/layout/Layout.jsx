@@ -2,7 +2,7 @@ import Header from './Header';
 
 const Layout = ({ children }) => {
   return (
-    <div className="max-w-7xl">
+    <div className="">
       <Header />
       {children}
     </div>

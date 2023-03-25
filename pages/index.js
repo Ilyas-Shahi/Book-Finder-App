@@ -1,9 +1,8 @@
+import CategorySlider from '@/components/CategorySlider';
 import { useTheme } from 'next-themes';
 import Head from 'next/head';
 
 export default function Home() {
-  const { theme, setTheme } = useTheme();
-
   return (
     <>
       <Head>
@@ -13,9 +12,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="p-5">
-        <button onClick={() => setTheme('light')}>set light</button>
-        <br />
-        <button onClick={() => setTheme('dark')}>set dark</button>
+        <CategorySlider />
       </main>
     </>
   );
