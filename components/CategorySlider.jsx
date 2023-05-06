@@ -1,15 +1,15 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
-
 import 'swiper/css';
-import { useEffect, useRef, useState } from 'react';
+
+import { useRef, useState } from 'react';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 const CategorySlider = () => {
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const swiperRef = useRef();
 
   return (
-    <div className="md:px-6">
+    <div className="md:px-6 sticky top-4">
       <Swiper
         slidesPerView={3}
         spaceBetween={8}

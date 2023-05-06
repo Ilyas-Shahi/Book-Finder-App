@@ -1,8 +1,10 @@
-import CategorySlider from '@/components/CategorySlider';
-import { useTheme } from 'next-themes';
 import Head from 'next/head';
 
-export default function Home() {
+import BooksList from '@/components/BooksList';
+import CategorySlider from '@/components/CategorySlider';
+
+export default function Home({ bestsellers }) {
+  console.log(bestsellers);
   return (
     <>
       <Head>
@@ -13,7 +15,23 @@ export default function Home() {
       </Head>
       <main className="p-5">
         <CategorySlider />
+
+        <BooksList data={bestsellers} title={'Bestsellers'} />
+
+        <div className="h-screen"></div>
       </main>
     </>
   );
+}
+
+export async function getServerSideProps() {
+  const bestsellers = await fetch(
+    'https://www.googleapis.com/books/v1/volumes?q=subject:fiction&orderBy=relevance'
+  ).then((res) => res.json());
+
+  return {
+    props: {
+      bestsellers,
+    },
+  };
 }

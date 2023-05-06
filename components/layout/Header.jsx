@@ -1,4 +1,3 @@
-import useIsMobile from '@/hooks/useIsMobile';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import {
@@ -8,6 +7,8 @@ import {
   BsSearch,
   BsXLg,
 } from 'react-icons/bs';
+
+import useIsMobile from '@/hooks/useIsMobile';
 
 const Header = () => {
   const { theme, setTheme } = useTheme();
