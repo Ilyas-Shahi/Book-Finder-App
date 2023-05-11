@@ -91,15 +91,17 @@ const CategorySlider = () => {
           </button>
         )}
 
-        <button
-          className="absolute top-0 h-full right-0 z-20"
-          onClick={() => {
-            swiperRef?.current.slideNext();
-            setActiveSlideIndex(swiperRef?.current?.activeIndex);
-          }}
-        >
-          <BsChevronRight size={20} />
-        </button>
+        {!swiperRef?.current?.isEnd && (
+          <button
+            className="absolute top-0 h-full right-0 z-20"
+            onClick={() => {
+              swiperRef?.current.slideNext();
+              setActiveSlideIndex(swiperRef?.current?.activeIndex);
+            }}
+          >
+            <BsChevronRight size={20} />
+          </button>
+        )}
 
         {activeSlideIndex > 0 && (
           <div className="absolute top-0 left-0 z-10 w-60 h-full bg-gradient-to-r from-white dark:from-slate-800" />

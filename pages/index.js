@@ -1,10 +1,10 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 import BooksList from '@/components/BooksList';
 import CategorySlider from '@/components/CategorySlider';
 
 export default function Home({ bestsellers }) {
-  console.log(bestsellers);
   return (
     <>
       <Head>
@@ -24,10 +24,14 @@ export default function Home({ bestsellers }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ query }) {
   const bestsellers = await fetch(
-    'https://www.googleapis.com/books/v1/volumes?q=subject:fiction&orderBy=relevance'
+    `https://www.googleapis.com/books/v1/volumes?q=subject:fiction&orderBy=relevance${
+      query.bestsellers ? `&maxResults=${query.bestsellers}` : ''
+    }`
   ).then((res) => res.json());
+
+  // 'https://www.googleapis.com/books/v1/volumes?q=subject:feminism'
 
   return {
     props: {
