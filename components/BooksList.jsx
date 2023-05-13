@@ -1,33 +1,45 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useEffect, useReducer, useRef, useState } from 'react';
-import { BiLinkExternal } from 'react-icons/bi';
+import { useEffect, useRef, useState } from 'react';
+import { BiLinkExternal, BiLoaderAlt } from 'react-icons/bi';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import { IoReloadOutline } from 'react-icons/io5';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-const BooksList = ({ data, title }) => {
+const BooksList = ({ data, title, dynamic }) => {
   const [numOfBooks, setNumOfBooks] = useState(10);
-  const router = useRouter();
-
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
-  const swiperRef = useRef();
+  const [sliderEnd, setSliderEnd] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  console.log(swiperRef);
+  const router = useRouter();
+  const swiperRef = useRef();
 
   useEffect(() => {
     if (numOfBooks > 10 && numOfBooks <= 30) {
-      router.query = {
-        ...router.query,
-        [title.toLowerCase().split(' ').join('-')]: numOfBooks,
-      };
-      router.push(router);
+      setIsLoading(data.items.length !== numOfBooks);
+
+      router.push(
+        {
+          query: {
+            ...router.query,
+            [title.toLowerCase().split(' ').join('')]: numOfBooks,
+          },
+        },
+        undefined,
+        { scroll: false }
+      );
     }
-  }, [numOfBooks]);
+  }, [numOfBooks, data?.items?.length]);
 
   return (
-    <div className="px-5 my-10">
-      <h2 className="mb-6 text-3xl">{title}</h2>
+    <div
+      id={
+        dynamic ? 'dynamicSec' : title.toLocaleLowerCase().split(' ').join('')
+      }
+      className="px-4 pb-8 my-10 border-b md:px-8 dark:border-slate-600 scroll-mt-20"
+    >
+      <h2 className="mb-6 text-2xl md:text-3xl">{title}</h2>
 
       <Swiper
         slidesPerView={1}
@@ -54,7 +66,7 @@ const BooksList = ({ data, title }) => {
             <div className="p-3 bg-gray-100 rounded-lg dark:bg-slate-700">
               <div className="flex gap-3">
                 <Image
-                  src={book.volumeInfo.imageLinks.thumbnail}
+                  src={book.volumeInfo.imageLinks?.thumbnail}
                   width={100}
                   height={100}
                   alt="Book Cover"
@@ -62,9 +74,9 @@ const BooksList = ({ data, title }) => {
                 />
 
                 <div>
-                  {book.volumeInfo.authors.slice(0, 2).map((author, index) => (
+                  {book.volumeInfo.authors?.slice(0, 2).map((author, index) => (
                     <p key={index} className="text-sm">
-                      {author}
+                      {author.substring(0, 24)}
                       {book.volumeInfo.authors.length > 1 && index == 0 && ','}
                     </p>
                   ))}
@@ -90,16 +102,21 @@ const BooksList = ({ data, title }) => {
           </SwiperSlide>
         ))}
 
-        {numOfBooks < 30 && (
+        {(isLoading || numOfBooks < 30) && (
           <SwiperSlide className="my-auto pt-14">
             <div
               onClick={() => {
                 setNumOfBooks(numOfBooks + 10);
+                if (!isLoading) setSliderEnd(false);
               }}
               className="flex flex-col items-center justify-center gap-3 p-3 mx-auto my-auto bg-gray-100 rounded-lg cursor-pointer h-28 w-36 dark:bg-slate-700 hover:dark:bg-slate-600 hover:bg-gray-200"
             >
-              <IoReloadOutline size={26} />
-              <span>Load More</span>
+              {isLoading ? (
+                <BiLoaderAlt size={28} className="animate-spin" />
+              ) : (
+                <IoReloadOutline size={26} />
+              )}
+              <span>{isLoading ? 'Loading' : 'Load More'}</span>
             </div>
           </SwiperSlide>
         )}
@@ -110,18 +127,20 @@ const BooksList = ({ data, title }) => {
             onClick={() => {
               swiperRef?.current.slidePrev();
               setActiveSlideIndex(swiperRef?.current?.activeIndex);
+              setSliderEnd(swiperRef?.current?.isEnd);
             }}
           >
             <BsChevronLeft size={20} />
           </button>
         )}
 
-        {numOfBooks < 30 && !swiperRef?.current?.isEnd && (
+        {!sliderEnd && (
           <button
             className="absolute top-0 right-0 z-20 h-full"
             onClick={() => {
               swiperRef?.current.slideNext();
               setActiveSlideIndex(swiperRef?.current?.activeIndex);
+              setSliderEnd(swiperRef?.current?.isEnd);
             }}
           >
             <BsChevronRight size={20} />
