@@ -20,22 +20,20 @@ export default function Home({
   const [dynamicCategory, setDynamicCategory] = useState();
   const [searchInp, setSearchInp] = useState();
   const [dynamicSection, setDynamicSection] = useState();
-  // const [dynamicSectionData, setDynamicSectionData] = useState();
 
   const { query } = useRouter();
 
   const handleDynamicCategory = (sub) => {
-    // setDynamicSection();
+    setDynamicSection();
     setDynamicCategory(sub);
   };
 
   const handleSearch = (inp) => {
+    setDynamicSection();
     setSearchInp(inp);
   };
 
   useEffect(() => {
-    setDynamicSection();
-
     const dynamicCategoryId = dynamicCategory
       ?.toLocaleLowerCase()
       .split(' ')
@@ -50,7 +48,7 @@ export default function Home({
         }`
       );
       const data = await res.json();
-      // setDynamicSectionData(data);
+
       setDynamicSection((prev) => ({
         ...prev,
         title: dynamicCategory,
@@ -61,20 +59,22 @@ export default function Home({
     fetchDynamicCategory();
   }, [dynamicCategory, query]);
 
-  console.log(dynamicSection);
-  // console.log(dynamicSectionData);
+  useEffect(() => {
+    // const searchInpId = searchInp?.toLocaleLowerCase().split(' ').join('');
 
-  // useEffect(() => {
-  //   // const dynamicSecId = dynamicSec?.toLocaleLowerCase().split(' ').join('');
+    const fetchSearch = async () => {
+      const res = await fetch(`${baseUrl}${searchInp}`);
+      const data = await res.json();
 
-  //   const fetchSearch = async () => {
-  //     const res = await fetch(`${baseUrl}${searchInp}`);
-  //     const data = await res.json();
-  //     setDynamicSection({ ...dynamicSection, data });
-  //   };
+      setDynamicSection((prev) => ({
+        ...prev,
+        title: `Search results for: ${searchInp}`,
+        data,
+      }));
+    };
 
-  //   fetchSearch();
-  // }, [searchInp, dynamicSection]);
+    fetchSearch();
+  }, [searchInp]);
 
   return (
     <>

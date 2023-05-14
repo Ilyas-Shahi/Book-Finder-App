@@ -70,7 +70,7 @@ const BooksList = ({ data, title, dynamic }) => {
                   width={100}
                   height={100}
                   alt="Book Cover"
-                  className="z-10 object-cover -mt-16 rounded-md h-36"
+                  className="z-10 object-cover -mt-16 rounded-md h-36 w-max"
                 />
 
                 <div>
@@ -102,7 +102,7 @@ const BooksList = ({ data, title, dynamic }) => {
           </SwiperSlide>
         ))}
 
-        {(isLoading || numOfBooks < 30) && (
+        {(isLoading || numOfBooks < 30) && !title.includes('Search') && (
           <SwiperSlide className="my-auto pt-14">
             <div
               onClick={() => {
