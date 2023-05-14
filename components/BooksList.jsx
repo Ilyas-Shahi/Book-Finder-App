@@ -17,7 +17,7 @@ const BooksList = ({ data, title, dynamic }) => {
 
   useEffect(() => {
     if (numOfBooks > 10 && numOfBooks <= 30) {
-      setIsLoading(data.items.length !== numOfBooks);
+      setIsLoading(data.items?.length !== numOfBooks);
 
       router.push(
         {
@@ -30,7 +30,7 @@ const BooksList = ({ data, title, dynamic }) => {
         { scroll: false }
       );
     }
-  }, [numOfBooks, data?.items?.length]);
+  }, [numOfBooks, data?.items?.length, title]);
 
   return (
     <div

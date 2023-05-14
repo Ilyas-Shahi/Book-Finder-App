@@ -24,7 +24,7 @@ const categories = [
   'Technology',
 ];
 
-const CategorySlider = ({ handleDynamicSec }) => {
+const CategorySlider = ({ handleDynamicCategory }) => {
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const swiperRef = useRef();
 
@@ -61,7 +61,7 @@ const CategorySlider = ({ handleDynamicSec }) => {
             >
               <div
                 onClick={() => {
-                  index > 5 && handleDynamicSec(category);
+                  index > 5 && handleDynamicCategory(category);
                 }}
                 className="p-1 text-center bg-gray-100 rounded-full dark:bg-slate-700 cursor-pointer"
               >

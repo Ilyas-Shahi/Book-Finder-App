@@ -1,11 +1,13 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { BiLoaderAlt } from 'react-icons/bi';
 
 import BooksList from '@/components/BooksList';
 import CategorySlider from '@/components/CategorySlider';
+import Header from '@/components/layout/Header';
 
-const baseUrl = 'https://www.googleapis.com/books/v1/volumes?q=subject:';
+const baseUrl = 'https://www.googleapis.com/books/v1/volumes?q=';
 
 export default function Home({
   bestsellers,
@@ -15,31 +17,64 @@ export default function Home({
   selfHelp,
   business,
 }) {
-  const [dynamicSec, setDynamicSec] = useState();
-  const [dynamicData, setDynamicData] = useState();
+  const [dynamicCategory, setDynamicCategory] = useState();
+  const [searchInp, setSearchInp] = useState();
+  const [dynamicSection, setDynamicSection] = useState();
+  // const [dynamicSectionData, setDynamicSectionData] = useState();
 
-  console.log(dynamicSec);
+  const { query } = useRouter();
 
-  const handleDynamicSec = (sub) => {
-    // setDynamicData();
-    setDynamicSec(sub);
+  const handleDynamicCategory = (sub) => {
+    // setDynamicSection();
+    setDynamicCategory(sub);
+  };
+
+  const handleSearch = (inp) => {
+    setSearchInp(inp);
   };
 
   useEffect(() => {
-    const fetchDynamicSec = async () => {
+    setDynamicSection();
+
+    const dynamicCategoryId = dynamicCategory
+      ?.toLocaleLowerCase()
+      .split(' ')
+      .join('');
+
+    const fetchDynamicCategory = async () => {
       const res = await fetch(
-        baseUrl + dynamicSec.toLocaleLowerCase().split(' ').join('')
+        `${baseUrl}subject:${dynamicCategoryId}${
+          query[dynamicCategoryId]
+            ? `&maxResults=${query[dynamicCategoryId]}`
+            : ''
+        }`
       );
       const data = await res.json();
-      setDynamicData(data);
+      // setDynamicSectionData(data);
+      setDynamicSection((prev) => ({
+        ...prev,
+        title: dynamicCategory,
+        data,
+      }));
     };
 
-    if (dynamicSec) {
-      fetchDynamicSec();
-    }
-  }, [dynamicSec]);
+    fetchDynamicCategory();
+  }, [dynamicCategory, query]);
 
-  console.log(dynamicData);
+  console.log(dynamicSection);
+  // console.log(dynamicSectionData);
+
+  // useEffect(() => {
+  //   // const dynamicSecId = dynamicSec?.toLocaleLowerCase().split(' ').join('');
+
+  //   const fetchSearch = async () => {
+  //     const res = await fetch(`${baseUrl}${searchInp}`);
+  //     const data = await res.json();
+  //     setDynamicSection({ ...dynamicSection, data });
+  //   };
+
+  //   fetchSearch();
+  // }, [searchInp, dynamicSection]);
 
   return (
     <>
@@ -50,10 +85,26 @@ export default function Home({
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="scroll-pt-28">
-        <CategorySlider handleDynamicSec={handleDynamicSec} />
+        <Header handleSearch={handleSearch} />
 
-        {dynamicSec && (
-          <BooksList data={dynamicData} title={dynamicSec} dynamic={true} />
+        <CategorySlider handleDynamicCategory={handleDynamicCategory} />
+
+        {(dynamicCategory || searchInp) && (
+          <div className="mb-20">
+            {dynamicSection ? (
+              <BooksList
+                data={dynamicSection?.data}
+                title={dynamicSection?.title}
+                dynamic={true}
+              />
+            ) : (
+              <div className="flex flex-col items-center bg-slate-600 p-4">
+                <BiLoaderAlt size={28} className="animate-spin" />
+
+                <p className="text-xl">Loading</p>
+              </div>
+            )}
+          </div>
         )}
 
         <BooksList data={bestsellers} title={'Bestsellers'} />
@@ -71,32 +122,32 @@ export async function getServerSideProps({ query }) {
   const [bestsellers, newReleases, fiction, nonfiction, selfHelp, business] =
     await Promise.all([
       fetch(
-        `${baseUrl}fiction+nonfiction&orderBy=relevance${
+        `${baseUrl}subject:fiction+nonfiction&orderBy=relevance${
           query.bestsellers ? `&maxResults=${query.bestsellers}` : ''
         }`
       ).then((res) => res.json()),
       fetch(
-        `${baseUrl}fiction+nonfiction&orderBy=newest${
+        `${baseUrl}subject:fiction+nonfiction&orderBy=newest${
           query.newreleases ? `&maxResults=${query.newreleases}` : ''
         }`
       ).then((res) => res.json()),
       fetch(
-        `${baseUrl}fiction&orderBy=relevance${
+        `${baseUrl}subject:fiction&orderBy=relevance${
           query.fiction ? `&maxResults=${query.fiction}` : ''
         }`
       ).then((res) => res.json()),
       fetch(
-        `${baseUrl}nonfiction&orderBy=relevance${
+        `${baseUrl}subject:nonfiction&orderBy=relevance${
           query.nonfiction ? `&maxResults=${query.nonfiction}` : ''
         }`
       ).then((res) => res.json()),
       fetch(
-        `${baseUrl}self-help&orderBy=relevance${
+        `${baseUrl}subject:self-help&orderBy=relevance${
           query.selfhelp ? `&maxResults=${query.selfhelp}` : ''
         }`
       ).then((res) => res.json()),
       fetch(
-        `${baseUrl}business&orderBy=relevance${
+        `${baseUrl}subject:business&orderBy=relevance${
           query.business ? `&maxResults=${query.business}` : ''
         }`
       ).then((res) => res.json()),

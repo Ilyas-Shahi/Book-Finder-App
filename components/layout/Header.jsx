@@ -10,7 +10,7 @@ import {
 
 import useIsMobile from '@/hooks/useIsMobile';
 
-const Header = () => {
+const Header = ({ handleSearch }) => {
   const { theme, setTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
   const [showMobileSearch, setShowMobileSearch] = useState(false);
@@ -43,9 +43,14 @@ const Header = () => {
           className={`sm:flex sm:mr-4 relative w-full ${
             showMobileSearch && isMobile ? 'flex' : 'hidden'
           }`}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearch(e.target.search.value);
+          }}
         >
           <input
             type="text"
+            name="search"
             placeholder="Search by Title, Author, or Series"
             className="w-full sm:w-64 pl-4 bg-gray-100 rounded-l-full dark:bg-slate-700 focus:outline-none dark:hover:bg-slate-600 hover:bg-gray-200"
           />
