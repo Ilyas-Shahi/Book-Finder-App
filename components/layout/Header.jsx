@@ -78,13 +78,13 @@ const Header = ({ handleSearch }) => {
           )}
         </div>
 
-        <div
+        {/* <div
           className={`p-2 bg-gray-100 rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-slate-600 dark:bg-slate-700 ${
             showMobileSearch && isMobile && 'hidden'
           }`}
         >
           <BsHeartFill size={20} />
-        </div>
+        </div> */}
       </div>
     </header>
   );

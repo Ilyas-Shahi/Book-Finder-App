@@ -98,7 +98,7 @@ export default function Home({
                 dynamic={true}
               />
             ) : (
-              <div className="flex flex-col items-center bg-slate-600 p-4">
+              <div className="flex flex-col items-center p-4 bg-gray-100 dark:bg-slate-700">
                 <BiLoaderAlt size={28} className="animate-spin" />
 
                 <p className="text-xl">Loading</p>

@@ -6,6 +6,8 @@ import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
 import { IoReloadOutline } from 'react-icons/io5';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import placeholderImg from '@/public/placeholder.png';
+
 const BooksList = ({ data, title, dynamic }) => {
   const [numOfBooks, setNumOfBooks] = useState(10);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
@@ -42,21 +44,25 @@ const BooksList = ({ data, title, dynamic }) => {
       <h2 className="mb-6 text-2xl md:text-3xl">{title}</h2>
 
       <Swiper
-        slidesPerView={1}
+        slidesPerView={1.3}
         spaceBetween={10}
         navigation={true}
+        centeredSlides={true}
         onBeforeInit={(swiper) => {
           swiperRef.current = swiper;
         }}
         breakpoints={{
           660: {
             slidesPerView: 2,
+            centeredSlides: false,
           },
           880: {
             slidesPerView: 3,
+            centeredSlides: false,
           },
           1080: {
             slidesPerView: 4,
+            centeredSlides: false,
           },
         }}
         className="relative !pr-24 mySwiper"
@@ -66,16 +72,21 @@ const BooksList = ({ data, title, dynamic }) => {
             <div className="p-3 bg-gray-100 rounded-lg dark:bg-slate-700">
               <div className="flex gap-3">
                 <Image
-                  src={book.volumeInfo.imageLinks?.thumbnail}
+                  src={
+                    book.volumeInfo.imageLinks
+                      ? book.volumeInfo.imageLinks?.thumbnail
+                      : placeholderImg
+                  }
                   width={100}
                   height={100}
+                  loading="lazy"
                   alt="Book Cover"
-                  className="z-10 object-cover -mt-16 rounded-md h-36 w-max"
+                  className="z-10 object-cover -mt-16 rounded-md h-36 w-24 shadow"
                 />
 
                 <div>
                   {book.volumeInfo.authors?.slice(0, 2).map((author, index) => (
-                    <p key={index} className="text-sm">
+                    <p key={index} className="text-xs md:text-sm">
                       {author.substring(0, 24)}
                       {book.volumeInfo.authors.length > 1 && index == 0 && ','}
                     </p>
@@ -93,7 +104,7 @@ const BooksList = ({ data, title, dynamic }) => {
                 </div>
               </div>
 
-              <h3 className="mt-4 mb-2 text-lg">
+              <h3 className="mt-4 mb-2 text-base md:text-lg">
                 {book.volumeInfo.title.length > 32
                   ? `${book.volumeInfo.title.substring(0, 24)}...`
                   : book.volumeInfo.title}
