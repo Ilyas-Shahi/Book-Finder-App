@@ -31,7 +31,7 @@ const CategorySlider = ({ handleDynamicCategory }) => {
   return (
     <div className="sticky top-0 z-50 px-4 py-2 bg-white md:px-6 md:py-3 dark:bg-slate-800">
       <Swiper
-        slidesPerView={3}
+        slidesPerView={2.5}
         spaceBetween={8}
         navigation={true}
         onBeforeInit={(swiper) => {
@@ -63,7 +63,7 @@ const CategorySlider = ({ handleDynamicCategory }) => {
                 onClick={() => {
                   index > 5 && handleDynamicCategory(category);
                 }}
-                className="p-1 text-center bg-gray-100 rounded-full dark:bg-slate-700 cursor-pointer"
+                className="p-1 text-sm text-center bg-gray-100 rounded-full cursor-pointer dark:bg-slate-700 md:text-base min-w-max"
               >
                 {category}
               </div>
@@ -74,7 +74,7 @@ const CategorySlider = ({ handleDynamicCategory }) => {
         {/* Nav buttons */}
         {activeSlideIndex > 0 && (
           <button
-            className="absolute top-0 left-0 z-20 h-full"
+            className="absolute top-0 left-0 z-20 h-full  bg-gradient-to-r from-white dark:from-slate-800"
             onClick={() => {
               swiperRef?.current.slidePrev();
               setActiveSlideIndex(swiperRef?.current?.activeIndex);
@@ -86,7 +86,7 @@ const CategorySlider = ({ handleDynamicCategory }) => {
 
         {!swiperRef?.current?.isEnd && (
           <button
-            className="absolute top-0 right-0 z-20 h-full"
+            className="absolute top-0 right-0 z-20 h-full bg-gradient-to-l from-white dark:from-slate-800"
             onClick={() => {
               swiperRef?.current.slideNext();
               setActiveSlideIndex(swiperRef?.current?.activeIndex);
@@ -97,10 +97,10 @@ const CategorySlider = ({ handleDynamicCategory }) => {
         )}
 
         {activeSlideIndex > 0 && (
-          <div className="absolute top-0 left-0 z-10 h-full w-28 md:w-60 bg-gradient-to-r from-white dark:from-slate-800" />
+          <div className="absolute top-0 left-0 z-10 w-24 h-full bg-gradient-to-r from-white dark:from-slate-800" />
         )}
 
-        <div className="absolute top-0 right-0 z-10 h-full w-28 md:w-60 bg-gradient-to-l from-white dark:from-slate-800" />
+        <div className="absolute top-0 right-0 z-10 w-24 h-full bg-gradient-to-l from-white dark:from-slate-800" />
       </Swiper>
     </div>
   );

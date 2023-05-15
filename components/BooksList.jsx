@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import placeholderImg from '@/public/placeholder.png';
 
-const BooksList = ({ data, title, dynamic }) => {
+const BooksList = ({ data, title }) => {
   const [numOfBooks, setNumOfBooks] = useState(10);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [sliderEnd, setSliderEnd] = useState(false);
@@ -36,9 +36,7 @@ const BooksList = ({ data, title, dynamic }) => {
 
   return (
     <div
-      id={
-        dynamic ? 'dynamicSec' : title.toLocaleLowerCase().split(' ').join('')
-      }
+      id={title.toLocaleLowerCase().split(' ').join('')}
       className="px-4 pb-8 my-10 border-b md:px-8 dark:border-slate-600 scroll-mt-20"
     >
       <h2 className="mb-6 text-2xl md:text-3xl">{title}</h2>
@@ -65,7 +63,7 @@ const BooksList = ({ data, title, dynamic }) => {
             centeredSlides: false,
           },
         }}
-        className="relative !pr-24 mySwiper"
+        className="relative !pr-8 md:!pr-24 mySwiper"
       >
         {data?.items?.map((book, index) => (
           <SwiperSlide key={index} className="pt-14">
@@ -81,7 +79,7 @@ const BooksList = ({ data, title, dynamic }) => {
                   height={100}
                   loading="lazy"
                   alt="Book Cover"
-                  className="z-10 object-cover -mt-16 rounded-md h-36 w-24 shadow"
+                  className="z-10 object-cover w-24 -mt-16 rounded-md shadow h-36"
                 />
 
                 <div>
@@ -105,7 +103,7 @@ const BooksList = ({ data, title, dynamic }) => {
               </div>
 
               <h3 className="mt-4 mb-2 text-base md:text-lg">
-                {book.volumeInfo.title.length > 32
+                {book.volumeInfo.title.length >= 32
                   ? `${book.volumeInfo.title.substring(0, 24)}...`
                   : book.volumeInfo.title}
               </h3>
@@ -159,10 +157,10 @@ const BooksList = ({ data, title, dynamic }) => {
         )}
 
         {activeSlideIndex > 0 && (
-          <div className="absolute top-0 left-0 z-10 w-32 h-full bg-gradient-to-r from-white dark:from-slate-800" />
+          <div className="absolute top-0 left-0 z-10 w-14 h-full md:w-32 bg-gradient-to-r from-white dark:from-slate-800" />
         )}
 
-        <div className="absolute top-0 right-0 z-10 w-32 h-full bg-gradient-to-l from-white dark:from-slate-800" />
+        <div className="absolute top-0 right-0 z-10 h-full w-14 md:w-32 bg-gradient-to-l from-white dark:from-slate-800" />
       </Swiper>
     </div>
   );
